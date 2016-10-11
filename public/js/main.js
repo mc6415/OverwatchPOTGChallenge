@@ -1,3 +1,5 @@
+var User = JSON.parse($.cookie('user'));
+
 var MainEntry = React.createClass({
   getInitialState: function(){
     return {
@@ -7,6 +9,8 @@ var MainEntry = React.createClass({
   componentWillMount: function(){
     $.ajax({
       url: '/api/Heroes/getAll',
+      data: {battletag: User.battletag},
+      method: "POST",
       success: function(res){
         this.setState({heroes: res})
       }.bind(this)
@@ -14,10 +18,12 @@ var MainEntry = React.createClass({
   },
   render: function(){
 
-    var nodes = this.state.heroes.map(function(n){
+    var nodes = this.state.heroes.map(function(n, i){
+      console.log(n);
       return(
-        <tr>
-          <td><img src={n.img} style={{height: '50%'}}/> {n.name}</td>
+        <tr key={i}>
+          <td><img src={n.image} style={{height: '50%'}}/> {n.name}</td>
+          <td>{n.playtime}</td>
         </tr>
       )
     })
@@ -27,6 +33,7 @@ var MainEntry = React.createClass({
         <thead>
           <tr>
             <td>Hero</td>
+            <td>Time Played</td>
           </tr>
         </thead>
         <tbody>

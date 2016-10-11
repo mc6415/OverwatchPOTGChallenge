@@ -29,9 +29,10 @@ app.get('/dash', function(req,res){
   res.sendFile(__dirname + '/public/views/heroList.html')
 })
 
-app.get('/api/Heroes/getAll', controllers.Heroes.getAll);
+app.get('/api/User/SignOut', controllers.User.SignOut);
 app.get('/api/potg/create', controllers.Potg.create);
 
+app.post('/api/Heroes/getAll', controllers.Heroes.getAll);
 app.post('/api/User/create', controllers.User.create);
 app.post('/api/User/login', controllers.User.login);
 
