@@ -43,6 +43,8 @@ app.get('/api/potg/create', controllers.Potg.create);
 app.post('/api/Heroes/getAll', controllers.Heroes.getAll);
 app.post('/api/User/create', controllers.User.create);
 app.post('/api/User/login', controllers.User.login);
+app.post('/api/potg/checkHero', controllers.Potg.check);
+app.post('/api/potg/getUser', controllers.Potg.getUser);
 
 // Listen on port 3000, IP defaults to 127.0.0.1
 app.listen(port, function(){

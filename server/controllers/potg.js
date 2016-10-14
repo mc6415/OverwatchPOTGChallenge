@@ -13,3 +13,16 @@ module.exports.create = function(req,res){
   console.log(potg);
 
 }
+
+module.exports.check = function(req,res){
+  POTG.find({user: req.body.username, character: req.body.hero}, function(err,docs){
+    console.log(docs);
+    res.send(docs);
+  })
+}
+
+module.exports.getUser = function(req,res){
+  POTG.find({user: req.body.username}, function(err, docs){
+    res.send(docs);
+  })
+}
