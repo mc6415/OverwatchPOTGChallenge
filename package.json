@@ -1,13 +1,9 @@
 {
-  "name": "overwatch_potg_challenge",
+  "name": "overwatchpotgchallenge",
   "version": "0.0.1",
+  "private": true,
   "description": "A tracker for the Overwatch POTG challenge me and a few friends have",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Michael Coombes",
-  "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
@@ -16,5 +12,8 @@
     "mongoose": "^4.6.3",
     "randomstring": "^1.1.5",
     "sha256": "^0.2.0"
+  },
+  "scripts": {
+    "start": "node app.js"
   }
 }
