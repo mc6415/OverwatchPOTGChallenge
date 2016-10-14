@@ -6,13 +6,13 @@ var MainEntry = React.createClass({
       heroes: []
     }
   },
-  componentWillMount: function(){
+  componentDidMount: function(){
     $.ajax({
       url: '/api/Heroes/getAll',
       data: {battletag: User.battletag},
       method: "POST",
       success: function(res){
-        this.setState({heroes: res})
+          this.setState({heroes: res});
       }.bind(this)
     })
   },
@@ -23,7 +23,6 @@ var MainEntry = React.createClass({
       return(
         <tr key={i}>
           <td><img src={n.image} style={{height: '50%'}}/> {n.name}</td>
-          <td>{n.playtime}</td>
         </tr>
       )
     })
@@ -33,7 +32,6 @@ var MainEntry = React.createClass({
         <thead>
           <tr>
             <td>Hero</td>
-            <td>Time Played</td>
           </tr>
         </thead>
         <tbody>
