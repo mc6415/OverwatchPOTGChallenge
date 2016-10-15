@@ -2,7 +2,7 @@ var User = JSON.parse($.cookie('user'));
 
 var MainEntry = React.createClass({
     getInitialState: function() {
-        return {heroes: [], potg: []}
+        return {heroes: [], potg: [], complete: 0, heroCount: 0}
     },
     componentWillMount: function() {
         $.ajax({
@@ -12,7 +12,7 @@ var MainEntry = React.createClass({
             },
             method: "POST",
             success: function(res) {
-                this.setState({heroes: res});
+                this.setState({heroes: res, heroCount: res.length});
             }.bind(this)
         })
 
@@ -23,9 +23,13 @@ var MainEntry = React.createClass({
             },
             method: "POST",
             success: function(res) {
-                this.setState({potg: res});
+                this.setState({potg: res, complete: res.length});
             }.bind(this)
         })
+    },
+    updateComplete: function(){
+      var newComplete = this.state.complete + 1
+      this.setState({complete: newComplete})
     },
     addPotg: function(hero) {},
     render: function() {
@@ -34,13 +38,16 @@ var MainEntry = React.createClass({
             var index = this.state.potg.findIndex(x => x.character == n.name);
 
             if (index > -1) {
+                var desired = n.name.replace(/[^\w\s]/gi, '').replace(/\s+/g, '')
+                var modalName = "#" + desired + "ViewModal"
                 return (
                     <tr key={i}>
                         <td><img src={n.image} style={{
                         height: '50%'
                     }}/> {n.name}</td>
                         <td>
-                            Aww This is my Jam!
+                            <button className="btn" data-toggle="modal" data-target={modalName}>View POTG</button>
+                            <ViewImage potg={this.state.potg[index]}/>
                         </td>
                     </tr>
                 )
@@ -64,6 +71,7 @@ var MainEntry = React.createClass({
         }.bind(this))
 
         return (
+          <div>
             <table className="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -75,6 +83,9 @@ var MainEntry = React.createClass({
                     {nodes}
                 </tbody>
             </table>
+            Heroes Complete: {this.state.complete} / {this.state.heroCount} <br/>
+            Percent Complete: {(this.state.complete / this.state.heroCount).toFixed(2)}%
+          </div>
         );
     }
 })
@@ -92,16 +103,16 @@ var UploadForm = React.createClass({
 
         reader.readAsDataURL(e.target.files[0]);
     },
-    updateInput: function(e){
-      if(e.target.value == 'Link'){
-        this.setState({image: ''})
-        // var control = $('#potg');
-        // if (typeof(control) != 'undefined'){
-        //   control.replaceWith(control = control.clone(true));
-        // }
-      }
+    updateInput: function(e) {
+        if (e.target.value == 'Link') {
+            this.setState({image: ''})
+            // var control = $('#potg');
+            // if (typeof(control) != 'undefined'){
+            //   control.replaceWith(control = control.clone(true));
+            // }
+        }
 
-      this.setState({input: e.target.value})
+        this.setState({input: e.target.value})
     },
     render: function() {
         var desired = this.props.hero.name.replace(/[^\w\s]/gi, '').replace(/\s+/g, '');
@@ -115,10 +126,10 @@ var UploadForm = React.createClass({
             img = ''
         }
         var input;
-        if(this.state.input == 'Image'){
-          input = (<input type="file" className="form-control" name="potg" id="potg" onChange={this.testFunction}/>)
-        } else if(this.state.input == 'Link'){
-          input = (<input type="text" className="form-control" name="youtube" onChange={this.setYoutube} />)
+        if (this.state.input == 'Image') {
+            input = (<input type="file" className="form-control" name="potg" id="potg" onChange={this.testFunction}/>)
+        } else if (this.state.input == 'Link') {
+            input = (<input type="text" className="form-control" name="youtube" onChange={this.setYoutube}/>)
         }
         return (
             <div className="modal fade" id={modalId} tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -130,14 +141,34 @@ var UploadForm = React.createClass({
                             <h1>{this.state.hero.name}
                                 POTG</h1>
                             <form action="/api/potg/create" encType="multipart/form-data" method="post">
-                                <label className="radio-inline"><input type="radio" name="optRadio" onChange={this.updateInput} value="Link" />Link</label>
+                                <label className="radio-inline"><input type="radio" name="optRadio" onChange={this.updateInput} value="Link"/>Link</label>
                                 <label className="radio-inline"><input type="radio" name="optRadio" onChange={this.updateInput} value="Image"/>Image</label>
                                 {input}
                                 <input type="hidden" id="username" name="username" value={User.username}/>
-                                <input type="hidden" id="hero" name="hero" value={this.props.hero.name} />
-                                {img}
+                                <input type="hidden" id="hero" name="hero" value={this.props.hero.name}/> {img}
                                 <input type="submit" className="form-control"/>
                             </form>
+                            <hr/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+})
+
+var ViewImage = React.createClass({
+    render: function() {
+        var desired = this.props.potg.character.replace(/[^\w\s]/gi, '').replace(/\s+/g, '');
+        var modalId = desired + "ViewModal"
+        return (
+            <div className="modal fade" id={modalId} tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-6 col-sm-offset-3 text-center modalForm" style={{width: "70%"}}>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">×</button>
+                            <br/><br/>
+                            <img src={"data:image/jpeg;base64,"+this.props.potg.image} style={{width: "100%"}} /> <br/>
                             <hr/>
                         </div>
                     </div>
