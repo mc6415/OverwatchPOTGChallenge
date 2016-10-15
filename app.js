@@ -9,6 +9,7 @@ var port = process.env.PORT || 3000,
     controllers = require('./server/controllers/Namespace.js'),
     mongoose = require('mongoose'),
     cookieParser = require('cookie-parser');
+    multer = require('multer');
 
 var log = function(entry) {
     fs.appendFileSync('/tmp/sample-app.log', new Date().toISOString() + ' - ' + entry + '\n');
@@ -19,9 +20,10 @@ mongoose.connect('mongodb://mc6415:owpotg@ds033956.mlab.com:33956/ow_potg')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-
+var upload = multer({ storage: multer.memoryStorage({}) });
 app.use('/', express.static(__dirname + '/public/views'));
 app.use('/js', express.static(__dirname + '/public/js'))
+app.use('/css', express.static(__dirname + '/public/css'))
 
 app.get('/', function(req,res){
   if(req.cookies.user != undefined){
@@ -38,8 +40,8 @@ app.get('/dash', function(req,res){
 })
 
 app.get('/api/User/SignOut', controllers.User.SignOut);
-app.get('/api/potg/create', controllers.Potg.create);
 
+app.post('/api/potg/create', upload.single('potg'), controllers.Potg.create);
 app.post('/api/Heroes/getAll', controllers.Heroes.getAll);
 app.post('/api/User/create', controllers.User.create);
 app.post('/api/User/login', controllers.User.login);
