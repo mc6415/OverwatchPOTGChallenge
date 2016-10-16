@@ -1,10 +1,11 @@
 var User = require('../models/user');
 const sha256 = require('sha256');
 const randomstring = require('randomstring');
+var POTG = require('../models/potg');
 
 module.exports.create = function(req,res){
     var user = new User();
-
+    console.log(user);
     var salt = randomstring.generate(10);
     var pepper = randomstring.generate(10);
 
@@ -40,5 +41,17 @@ module.exports.login = function(req,res){
 
 module.exports.SignOut = function(req,res){
   res.clearCookie('user');
-  res.status(201).redirect('/');
+  res.redirect('/');
+}
+
+module.exports.View = function(req,res){
+      POTG.find({user: req.params.id}, function(err,docs){
+        res.render('test', {potg: docs})
+      })
+}
+
+module.exports.ViewAll = function(req,res){
+  User.find({}, function(err,docs){
+    res.render('UserList', {users: docs})
+  })
 }

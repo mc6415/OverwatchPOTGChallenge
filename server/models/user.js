@@ -8,5 +8,6 @@ module.exports = mongoose.model('User', {
   pepper: {type: String, required: true},
   firstName: {type: String},
   lastName: {type: String},
-  battletag: {type: String}
+  battletag: {type: String},
+  isAdmin: {type: Number, default: 0}
 })

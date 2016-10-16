@@ -33,7 +33,11 @@ var MainEntry = React.createClass({
     },
     addPotg: function(hero) {},
     render: function() {
-
+        console.log(User);
+        var removeVis = "none"
+        if(User.isAdmin == 1){
+          removeVis =  ""
+        }
         var nodes = this.state.heroes.map(function(n, i) {
             var index = this.state.potg.findIndex(x => x.character == n.name);
 
@@ -47,6 +51,7 @@ var MainEntry = React.createClass({
                     }}/> {n.name}</td>
                         <td>
                             <button className="btn" data-toggle="modal" data-target={modalName}>View POTG</button>
+                            <a className="btn btn-danger" style={{display: removeVis, marginLeft: "10px"}} id="removeBtn" href={"/api/potg/remove/" + this.state.potg[index]._id}> Remove</a>
                             <ViewImage potg={this.state.potg[index]}/>
                         </td>
                     </tr>

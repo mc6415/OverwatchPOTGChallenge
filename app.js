@@ -16,6 +16,8 @@ var log = function(entry) {
 };
 
 mongoose.connect('mongodb://mc6415:owpotg@ds033956.mlab.com:33956/ow_potg')
+app.set('view engine', 'pug');
+app.set('views', __dirname + '/public/views');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -40,6 +42,9 @@ app.get('/dash', function(req,res){
 })
 
 app.get('/api/User/SignOut', controllers.User.SignOut);
+app.get('/User/View/:id', controllers.User.View);
+app.get('/User/ViewAll', controllers.User.ViewAll);
+app.get('/api/potg/remove/:id', controllers.Potg.remove);
 
 app.post('/api/potg/create', upload.single('potg'), controllers.Potg.create);
 app.post('/api/Heroes/getAll', controllers.Heroes.getAll);

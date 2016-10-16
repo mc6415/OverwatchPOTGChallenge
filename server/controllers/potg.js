@@ -13,7 +13,7 @@ module.exports.create = function(req,res){
     potg.image = req.file.buffer.toString('base64');
   }
 
-  potg.save();
+  potg.save();''
 
   res.redirect('/')
 }
@@ -28,5 +28,12 @@ module.exports.check = function(req,res){
 module.exports.getUser = function(req,res){
   POTG.find({user: req.body.username}, function(err, docs){
     res.send(docs);
+  })
+}
+
+module.exports.remove = function(req,res){
+  var id = req.params.id;
+  POTG.remove({_id : id}, function(){
+    res.redirect('/');
   })
 }

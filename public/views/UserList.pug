@@ -1,0 +1,13 @@
+extends layout.pug
+
+block content
+  table(class="table")
+    thead
+      tr
+        th UserName
+    tbody
+      each val in users
+        tr
+          td=val.username
+          td
+            a(class="btn btn-primary", href="/User/View/"+val.username) View User POTGs

@@ -1,0 +1,30 @@
+html
+  include ./head.pug
+  body
+    include ./navbar.pug
+    table(class='table')
+      thead
+        tr
+          th Hero
+          th POTG
+          th
+      tbody
+        each val in potg
+          tr
+            td=val.character
+            td=val.createdDate
+            td
+              button(class='btn btn-primary', data-toggle='modal', data-target='#'+val._id) View POTG
+          - var n = "Hello World"
+          div(class='modal fade', id=val._id, tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+            div(class='container')
+              div(class='row')
+                div(class='col-sm-6 col-sm-offset-3 text-center modalForm')
+                  button(type='button', class='close', data-dismiss='modal', aria-label='Close') ×
+                  br
+                  br
+                  h1=val.character
+                  img(src='data:image/jpeg;base64,'+val.image, style='width:100%')
+                  br
+                  button(class='btn btn-warning') Report
+                  hr
